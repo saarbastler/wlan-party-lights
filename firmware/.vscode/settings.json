@@ -1,0 +1,10 @@
+{
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\Joerg\\.platformio\\penv\\Scripts;C:\\Users\\Joerg\\.platformio\\penv;C:\\Tools\\Python27\\;C:\\Tools\\Python27\\Scripts;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\dev\\msys64\\mingw64\\bin;C:\\dev\\msys64\\usr\\bin;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files (x86)\\Windows Kits\\8.1\\Windows Performance Toolkit\\;C:\\Program Files\\doxygen\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Joerg\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Joerg\\AppData\\Roaming\\npm;C:\\Program Files (x86)\\Microsoft VS Code\\bin;;C:\\Program Files\\Microsoft VS Code Insiders\\bin;C:\\Tools\\Python27\\;C:\\Tools\\Python27\\Scripts;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\dev\\msys64\\mingw64\\bin;C:\\dev\\msys64\\usr\\bin;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\TortoiseSVN\\bin;C:\\Program Files (x86)\\Windows Kits\\8.1\\Windows Performance Toolkit\\;C:\\Program Files\\doxygen\\bin;C:\\Program Files\\nodejs\\;C:\\Program Files\\TortoiseGit\\bin;C:\\Users\\Joerg\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Joerg\\AppData\\Roaming\\npm;C:\\Program Files (x86)\\Microsoft VS Code\\bin;;C:\\Program Files\\Microsoft VS Code Insiders\\bin",
+        "PLATFORMIO_CALLER": "vscode"
+    },
+    "files.associations": {
+        "array": "cpp",
+        "initializer_list": "cpp"
+    }
+}
