@@ -8,4 +8,4 @@ small website controlling the colors and brightness.
 
 * link:../../tree/master/3d/[3D printed parts]
 * link:../../tree/master/PCB/[PCB]
-* link:../../tree/master/Firmware/[Firmware]
+* link:../../tree/master/firmware/[Firmware]
