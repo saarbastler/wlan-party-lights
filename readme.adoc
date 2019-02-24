@@ -6,4 +6,4 @@ image:images/lichterkette.jpg[]
 A chain of WS2812 Led's, each in a single jam jar. A ESP8266 Controller serves a
 small website controlling the colors and brightness.
 
-* link:tree/master/3d/[3D printed parts]
+* link:../../tree/master/3d/[3D printed parts]
