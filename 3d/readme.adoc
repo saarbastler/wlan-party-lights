@@ -1,0 +1,21 @@
+== 3d Printed Parts
+
+All Parts are designed using OpenSCAD.
+
+=== single jam jar
+
+Drill a 10mm hole in the original cap and use image:schutz.png[schutz.stl] as a
+bend protection. Wire the cables through and solder them in the PCB.
+The image:ring.png[ring.stl] keep the distance between cap and the PCB. Use heat
+shrinking tube and cable tie to fix it.
+
+image:complete.jpg[]
+
+image:complete_img.jpg[]
+
+=== Controller
+
+The Controller case has got two parts, just push the Controller PCB in at click the
+cap on it.
+
+image:controller.png[]

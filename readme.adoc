@@ -1,0 +1,9 @@
+
+image:images/lichterkette.jpg[]
+
+= Wifi Party Lights
+
+A chain of WS2812 Led's, each in a single jam jar. A ESP8266 Controller serves a
+small website controlling the colors and brightness.
+
+* link:3D/[3D printed parts]
