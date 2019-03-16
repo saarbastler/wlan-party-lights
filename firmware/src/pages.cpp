@@ -22,8 +22,55 @@ void addButton(String& page, const char *action, const char *color, const char *
   page += FPSTR("</img></button>");
 }
 
+/** Is this an IP? */
+boolean /*WiFiManager::*/isIp(String str)
+{
+  for (size_t i = 0; i < str.length(); i++)
+  {
+    int c = str.charAt(i);
+    if (c != '.' && (c < '0' || c > '9'))
+    {
+      return false;
+    }
+  }
+  return true;
+}
+
+/** IP to String? */
+String /*WiFiManager::*/toStringIp(IPAddress ip)
+{
+  String res = "";
+  for (int i = 0; i < 3; i++)
+  {
+    res += String((ip >> (8 * i)) & 0xFF) + ".";
+  }
+  res += String(((ip >> 8 * 3)) & 0xFF);
+  return res;
+}
+
+/** Redirect to captive portal if we got a request for another domain. Return true in that case so the page handler do not try to handle the request again. */
+boolean /*WiFiManager::*/captivePortal()
+{
+  if (!isIp(server->hostHeader()) )
+  {
+    Serial.println(F("Request redirected to captive portal"));
+    server->sendHeader("Location", String("http://") + toStringIp(server->client().localIP()), true);
+    server->send ( 302, "text/plain", ""); // Empty content inhibits Content-length header so we have to close the socket ourselves.
+    server->client().stop(); // Stop is needed because we sent no content length
+    return true;
+  }
+  return false;
+}
+
 void pageIndex()
 {
+  Serial.println(server->uri());
+  Serial.println(server->hostHeader());
+
+  if (captivePortal()) { // If caprive portal redirect instead of displaying the page.
+    return;
+  }
+
   if(server->hasArg("a"))
   {
     String action= server->arg("a");
@@ -139,6 +186,9 @@ void glas()
 
 void handleNotFound()
 {
+  if (captivePortal()) // If captive portal redirect instead of displaying the error page.
+   return;
+
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server->uri();
@@ -151,4 +201,6 @@ void handleNotFound()
     message += " " + server->argName(i) + ": " + server->arg(i) + "\n";
   }
   server->send(404, "text/plain", message);
+
+  Serial.println(message);
 }
