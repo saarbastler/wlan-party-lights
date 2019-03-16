@@ -10,16 +10,33 @@ const char ACTION_BRIGHTER[] PROGMEM = "brighter";
 const char ACTION_DARKER[] PROGMEM = "darker";
 const char ACTION_GLOW[] PROGMEM = "glow";
 const char ACTION_RUN[] PROGMEM = "run";
+const char ACTION_WIFI[] PROGMEM = "wifi";
 
-void addButton(String& page, const char *action, const char *color, const char *title)
+void addLamp(String& page, const char *color)
 {
-  page += FPSTR("<button name=\"a\" value=\"");
-  page += FPSTR(action);
-  page += FPSTR("\"><img src=\"/glas.svg?c=");
+  page += FPSTR("<img src=\"/glas.svg?c=");
   page += FPSTR(color);
   page += FPSTR("\">");
+}
+
+void addLamps(String& page, const char *color)
+{
+  addLamp(page, color);
+  addLamp(page, color);
+  addLamp(page, color);
+}
+
+void addButton(String& page, const char *action, const char *title, bool selected= false)
+{
+  page += FPSTR("<p><button name=\"a\" value=\"");
+  page += FPSTR(action);
+  if( selected )
+    page += FPSTR("\" class=\"sel\"><bb>");
+  else
+    page += FPSTR("\"><bb>");
+
   page += FPSTR(title);
-  page += FPSTR("</img></button>");
+  page += FPSTR("</bb></button>");
 }
 
 /** Is this an IP? */
@@ -67,9 +84,8 @@ void pageIndex()
   Serial.println(server->uri());
   Serial.println(server->hostHeader());
 
-  if (captivePortal()) { // If caprive portal redirect instead of displaying the page.
+  if (captivePortal())
     return;
-  }
 
   if(server->hasArg("a"))
   {
@@ -89,34 +105,59 @@ void pageIndex()
       brighter();
     else if(action == FPSTR(ACTION_DARKER))
       darker();
+    else if(action == FPSTR(ACTION_WIFI))
+    {
+      if(WiFi.status() == WL_CONNECTED)
+        WiFi.disconnect(true);
+
+      ESP.reset();
+    }
   }
 
   String page = FPSTR(INDEX_HTML_PREFIX);
-  if(mode != Off)
-    addButton(page, ACTION_OFF, PSTR("111"), PSTR("Aus"));
-    //page += FPSTR(INDEX_HTML_BUTTON_OFF);
+  switch(mode)
+  {
+    case OnlyWhite:
+      addLamps(page, PSTR("fff"));
+      break;
+    case Colored:
+      addLamp(page, PSTR("f00"));
+      addLamp(page, PSTR("00f"));
+      addLamp(page, PSTR("0ff"));
+      break;
+    case Glow:
+      addLamp(page, PSTR("060"));
+      addLamp(page, PSTR("0f0"));
+      addLamp(page, PSTR("060"));
+      break;
+    case Run:
+      addLamp(page, PSTR("000"));
+      addLamp(page, PSTR("00f"));
+      addLamp(page, PSTR("000"));
+      break;
+    case Off:
+    default:
+      addLamps(page, PSTR("111"));
+  }
 
-  if(mode != OnlyWhite)
-    addButton(page, ACTION_WHITE, PSTR("eee"), PSTR("Weiß"));
-    //page += FPSTR(INDEX_HTML_BUTTON_WHITE);
-
-  if( mode != Colored)
-    addButton(page, ACTION_COLORED, PSTR("44e"), PSTR("Bunt"));
-    //page += FPSTR(INDEX_HTML_BUTTON_COLORED);
+  addButton(page, ACTION_OFF, PSTR("Aus"), mode == Off);
+  addButton(page, ACTION_WHITE, PSTR("Weiß"), mode == OnlyWhite);
+  addButton(page, ACTION_COLORED, PSTR("Bunt"), mode == Colored);
 
   uint8_t brightness= pixels.getBrightness();
 
   if(mode == OnlyWhite || mode == Colored)
   {
     if( brightness < 255)
-      addButton(page, ACTION_BRIGHTER, PSTR("ccc"), PSTR("Heller"));
+      addButton(page, ACTION_BRIGHTER, PSTR("Heller"));
 
     if( brightness > 11)
-      addButton(page, ACTION_DARKER, PSTR("444"), PSTR("Dunkler"));
+      addButton(page, ACTION_DARKER, PSTR("Dunkler"));
   }
 
-  addButton(page, ACTION_GLOW, PSTR("ff0"), PSTR("Glimmen"));
-  addButton(page, ACTION_RUN, PSTR("0ff"), PSTR("Lauflicht"));
+  addButton(page, ACTION_GLOW, PSTR("Glimmen"), mode == Glow);
+  addButton(page, ACTION_RUN, PSTR("Lauflicht"), mode == Run);
+  addButton(page, ACTION_WIFI, PSTR("WLan"), false);
 
   page += FPSTR(INDEX_HTML_SUFFIX);
 
