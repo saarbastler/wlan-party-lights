@@ -1,3 +1,5 @@
+#include <EEPROM.h>
+
 #include "pages.h"
 #include "files.h"
 #include "lichterkette.h"
@@ -107,9 +109,18 @@ void pageIndex()
       darker();
     else if(action == FPSTR(ACTION_WIFI))
     {
-      if(WiFi.status() == WL_CONNECTED)
-        WiFi.disconnect(true);
+      if(EEPROM.read(0) != 0)
+      {
+        EEPROM.write(0,0);
+        EEPROM.commit();
+      }
 
+      String page= PAGE_RESET;
+      server->send(200, "text/html", page);
+
+      delay(1000);
+      WiFi.disconnect(true);
+      delay(1000);
       ESP.reset();
     }
   }
@@ -137,7 +148,7 @@ void pageIndex()
       break;
     case Off:
     default:
-      addLamps(page, PSTR("111"));
+      addLamps(page, PSTR("666"));
   }
 
   addButton(page, ACTION_OFF, PSTR("Aus"), mode == Off);
@@ -157,14 +168,14 @@ void pageIndex()
 
   addButton(page, ACTION_GLOW, PSTR("Glimmen"), mode == Glow);
   addButton(page, ACTION_RUN, PSTR("Lauflicht"), mode == Run);
-  addButton(page, ACTION_WIFI, PSTR("WLan"), false);
+  addButton(page, ACTION_WIFI, PSTR("Wifi zurücksetzen"), false);
 
   page += FPSTR(INDEX_HTML_SUFFIX);
 
   server->send(200, "text/html", page);
 }
 
-void pageForm(uint8_t r, uint8_t g, uint8_t b, uint8_t w)
+/*void pageForm(uint8_t r, uint8_t g, uint8_t b, uint8_t w)
 {
   String page = FPSTR(FORM_HTML);
   page.replace("{r}", String(r));
@@ -200,7 +211,7 @@ void rgb()
   {
     server->send(400, "text/plain", "missing arguments");
   }
-}
+}*/
 
 void glas()
 {

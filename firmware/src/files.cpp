@@ -24,14 +24,14 @@ const char INDEX_HTML_SUFFIX[] PROGMEM =
 "</form>"
 "</html>";
 
-const char FORM_HTML[] PROGMEM  =
+/*const char FORM_HTML[] PROGMEM  =
 "<!DOCTYPE html><html lang=\"de\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"/><title>Lichterkette</title>"
 "<meta charset=\"utf-8\"/><title>{v}</title></head><body><form action=\"/rgb\"><table>"
 "<tr><td><label for=\"r\">Rot:</label></td><td><input type=\"number\" name=\"r\" style=\"text-align: right;\" value=\"{r}\"/></td></tr>"
 "<tr><td><label for=\"g\">Grün:</label></td><td><input type=\"number\" name=\"g\" style=\"text-align: right;\" value=\"{g}\"/></td></tr>"
 "<tr><td><label for=\"b\">Blau:</label></td><td><input type=\"number\" name=\"b\" style=\"text-align: right;\" value=\"{b}\"/></td></tr>"
 "<tr><td><label for=\"w\">Weiss:</label></td><td><input type=\"number\" name=\"w\" style=\"text-align: right;\" value=\"{w}\"/></td></tr>"
-"</table><button type=\"submit\">OK</button></form></body>";
+"</table><button type=\"submit\">OK</button></form></body>";*/
 
 const char GLAS_SVG[] PROGMEM  =
   "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
@@ -96,3 +96,14 @@ const char GLAS_SVG[] PROGMEM  =
   "<path d=\"M1.2,1.09 4.21,0.28 5.98,0.69 2.65,1.44\"/>"
   "</g>"
   "</svg>";
+
+const char PAGE_RESET[] PROGMEM =
+"<!DOCTYPE html>"
+"<html lang=\"de\">"
+"<head>"
+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, user-scalable=no\"/>"
+"<meta charset=\"utf-8\" />"
+"<title>Lichterkette</title>"
+"</head><body>"
+"Die Lichterkette wird neu gestartet. Im WLAN Menü jetzt 'lichterkette' wählen."
+"</body></html>";

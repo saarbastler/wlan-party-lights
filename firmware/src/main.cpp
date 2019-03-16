@@ -5,6 +5,7 @@
 //needed for library
 #include <DNSServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
+#include <EEPROM.h>
 
 #include <memory>
 
@@ -21,15 +22,14 @@ unsigned long lastMillis;
 #define BUTTON  0
 // DNS server
 constexpr byte    DNS_PORT = 53;
+constexpr uint32_t WIFI_MAGIC = 0x53514241;
 
 DebounceInput<BUTTON> button;
-/*void lk()
-{
-  server->send_P(200,"image/png", data_lk_png, size_lk_png);
-}*/
 
 void setup()
 {
+  EEPROM.begin(4);
+
   // put your setup code here, to run once:
   Serial.begin(115200);
 
@@ -37,21 +37,34 @@ void setup()
 
   setAll(50, 0, 0, 0);
 
+  WiFi.mode(WIFI_AP);
   char name[]= "lichterkette";
-  wifi_station_set_hostname(name);
-
-  //WiFiManager
-  //Local intialization. Once its business is done, there is no need to keep it around
-  WiFiManager wifiManager;
-  wifiManager.setDebugOutput(false);
-  wifiManager.setConfigPortalTimeout(30);
-  //reset saved settings
-  //wifiManager.resetSettings();
-
-  wifiManager.autoConnect(name);
-
-  if(WiFi.status() != WL_CONNECTED)
+  uint32_t wifiMagic;
+  if( EEPROM.get(0, wifiMagic) != WIFI_MAGIC)
   {
+    wifi_station_set_hostname(name);
+
+    //WiFiManager
+    //Local intialization. Once its business is done, there is no need to keep it around
+    WiFiManager wifiManager;
+    wifiManager.setDebugOutput(false);
+    wifiManager.setConfigPortalTimeout(30);
+    //reset saved settings
+    //wifiManager.resetSettings();
+
+    wifiManager.autoConnect(name);
+  }
+
+  if(WiFi.status() == WL_CONNECTED)
+  {
+    wifiMagic= WIFI_MAGIC;
+    EEPROM.write(0, wifiMagic);
+    EEPROM.commit();
+  }
+  else
+  {
+    EEPROM.write(0,0);
+    EEPROM.commit();
     IPAddress ip(192,168,200,200);
     IPAddress subnet(255,255,255,0);
 
@@ -61,7 +74,7 @@ void setup()
 
     WiFi.softAPConfig(ip, ip, subnet);
 
-    WiFi.softAP("licherkette");
+    WiFi.softAP(name);
 
     delay(500); // Without delay I've seen the IP address blank
     Serial.print("Soft-AP IP address = ");
@@ -77,8 +90,8 @@ void setup()
   server.reset(new ESP8266WebServer(80));
 
   server->on(F("/"), HTTP_GET, pageIndex);
-  server->on(F("/rgb"), HTTP_GET, rgb);
-  server->on(F("/form"), HTTP_GET, pageForm);
+  //server->on(F("/rgb"), HTTP_GET, rgb);
+  //server->on(F("/form"), HTTP_GET, pageForm);
   server->on(F("/glas.svg"), HTTP_GET, glas);
   //server->on("/col", rgb);
   server->onNotFound(handleNotFound);
